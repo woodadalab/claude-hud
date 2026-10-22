@@ -20,7 +20,8 @@ function formatWindow(f, layout, w, align) {
     const resetText = reset && wording ? `${t(timeFormat === 'absolute' ? 'format.resets' : 'format.resetsIn')} ${reset}` : reset;
     const styledLabel = w.labelKey ? barLabel(w.labelKey, colors, align) : label(w.label, colors);
     if (display?.usageBarEnabled ?? true) {
-        const barReset = layout === 'compact' && timeFormat === 'relative' && reset
+        const windowDuration = layout === 'compact' || display?.usageWindowDuration === true;
+        const barReset = windowDuration && timeFormat === 'relative' && reset
             ? `${reset} / ${w.durationLabel ?? w.label}`
             : resetText;
         const body = `${quotaBar(w.percent ?? 0, f.barWidth, colors, w.pace)} ${percent}${barReset ? ` (${barReset})` : ''}`;
@@ -94,6 +95,7 @@ export function usageParts(f, layout, align = {}) {
         windowMs: SEVEN_DAY_WINDOW_MS,
         pace: paces.sevenDay,
         forceLabel: true,
+        durationLabel: display?.usageWindowDuration ? '7d' : undefined,
     }, align);
     if (display?.usageCompact) {
         const windows = [

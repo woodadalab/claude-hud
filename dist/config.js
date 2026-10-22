@@ -102,6 +102,7 @@ export const DEFAULT_CONFIG = {
         usageValue: 'percent',
         usageBarEnabled: true,
         showResetLabel: true,
+        usageWindowDuration: false,
         usageCompact: false,
         showModelScopedUsage: true,
         usagePace: false,

@@ -144,6 +144,7 @@ export interface HudConfig {
     usageValue: UsageValueMode;
     usageBarEnabled: boolean;
     showResetLabel: boolean;
+    usageWindowDuration: boolean;
     usageCompact: boolean;
     showModelScopedUsage: boolean;
     usagePace: boolean;
@@ -244,6 +245,7 @@ export const DEFAULT_CONFIG: HudConfig = {
     usageValue: 'percent',
     usageBarEnabled: true,
     showResetLabel: true,
+    usageWindowDuration: false,
     usageCompact: false,
     showModelScopedUsage: true,
     usagePace: false,

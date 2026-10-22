@@ -17,7 +17,7 @@ interface UsageWindow {
   pace: UsagePace | null;
   /** Prefix the label even in bar mode. */
   forceLabel?: boolean;
-  /** Compact bars show `(1h 30m / 5h)`; this names the window after the slash. */
+  /** Compact bars (or `display.usageWindowDuration`) show `(1h 30m / 5h)`; this names the window after the slash. */
   durationLabel?: string;
 }
 
@@ -40,7 +40,8 @@ function formatWindow(f: Frame, layout: Layout, w: UsageWindow, align: LabelAlig
   const styledLabel = w.labelKey ? barLabel(w.labelKey, colors, align) : label(w.label, colors);
 
   if (display?.usageBarEnabled ?? true) {
-    const barReset = layout === 'compact' && timeFormat === 'relative' && reset
+    const windowDuration = layout === 'compact' || display?.usageWindowDuration === true;
+    const barReset = windowDuration && timeFormat === 'relative' && reset
       ? `${reset} / ${w.durationLabel ?? w.label}`
       : resetText;
     const body = `${quotaBar(w.percent ?? 0, f.barWidth, colors, w.pace)} ${percent}${barReset ? ` (${barReset})` : ''}`;
@@ -120,6 +121,7 @@ export function usageParts(f: Frame, layout: Layout, align: LabelAlign = {}): st
     windowMs: SEVEN_DAY_WINDOW_MS,
     pace: paces.sevenDay,
     forceLabel: true,
+    durationLabel: display?.usageWindowDuration ? '7d' : undefined,
   }, align);
 
   if (display?.usageCompact) {

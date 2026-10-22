@@ -76,6 +76,16 @@ test('scoped usage windows follow 5h and weekly, with the window length in compa
   );
 });
 
+test('usageWindowDuration shows the window length in expanded bars too', () => {
+  const data = usage({ sevenDay: 85 });
+  const config = { display: { usageWindowDuration: true } };
+  assert.equal(
+    lines(ctx({ usageData: data, config }))[1],
+    'Context █████░░░░░ 45% │ Usage ███░░░░░░░ 25% (1h 30m / 5h) | Weekly █████████░ 85% (2d 2h / 7d)',
+  );
+  assert.match(lines(ctx({ usageData: data, config: compact(config) }))[0], /\(1h 30m \/ 5h\) \| Weekly .* \(2d 2h \/ 7d\)$/);
+});
+
 test('scoped-only usage leads with the Usage label; hiding scoped windows keeps the balance', () => {
   const scopedOnly = usage({ fiveHour: null, sevenDay: null, scopedWindows: [fable()] });
   assert.equal(lines(ctx({ usageData: scopedOnly }))[1], 'Context █████░░░░░ 45% │ Usage Fable ██████░░░░ 60% (resets in 1d 6h)');

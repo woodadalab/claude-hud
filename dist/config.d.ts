@@ -91,6 +91,7 @@ export interface HudConfig {
         usageValue: UsageValueMode;
         usageBarEnabled: boolean;
         showResetLabel: boolean;
+        usageWindowDuration: boolean;
         usageCompact: boolean;
         showModelScopedUsage: boolean;
         usagePace: boolean;
