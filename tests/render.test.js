@@ -205,6 +205,8 @@ test('effortPlacement segment moves effort out of the badge into its own level-c
   assert.equal(segments('high', { effortFormat: 'text' })[1], 'high');
   assert.equal(segments('high', {}, { projectLineOrder: ['effort'] })[0], '◑ high');
   assert.equal(segments('high', { effortPlacement: 'badge' })[0], '[Opus ◑ high | Enterprise]');
+  assert.equal(segments('high', { effortPlacement: 'inline' })[0], '[Opus | Enterprise] ◑ high');
+  assert.equal(segments('high', { effortPlacement: 'inline', showModel: false })[0], '◑ high');
   assert.ok(!segments('high', { showEffortLevel: false }).includes('◑ high'));
   assert.match(colored('low'), /\x1b\[38;2;108;108;108m○ low/);
   assert.match(colored('xhigh'), /\x1b\[1m\x1b\[38;2;175;135;255m◕ xhigh/);
@@ -378,6 +380,7 @@ test('the environment line names failing MCP servers and respects environmentThr
   const transcript = { mcpErrors: ['github', 'linear', 'slack', 'notion'] };
   assert.equal(lines(ctx({ ...counts, transcript, config: { display: { showConfigCounts: true } } }))[2], '2 CLAUDE.md | 3 rules | 4 MCPs ⚠ github, linear, slack +1 | 1 hooks');
   assert.equal(lines(ctx({ claudeMdCount: 2, config: { display: { showConfigCounts: true, environmentThreshold: 5 } } })).length, 2);
+  assert.equal(lines(ctx({ ...counts, config: { display: { showConfigCounts: true, showClaudeMdCount: false } } }))[2], '3 rules | 4 MCPs | 1 hooks');
   assert.equal(lines(ctx({ transcript: { mcpErrors: ['github'] }, config: { display: { showMcp: true } } }))[2], '⚠ github');
 });
 
@@ -451,4 +454,11 @@ test('untrusted text cannot emit terminal control sequences', () => {
     assert.doesNotMatch(visible, /[\x00-\x09\x0b-\x1f\x7f-\x9f\u202a-\u202e]/);
     assert.ok(!out.includes('\x1b]52'));
   }
+});
+
+test('showProjectWorktree puts the linked worktree name right after the project path', () => {
+  const c = (display = {}, gitStatus = { enabled: false }) => ctx({ stdin: { cwd: '/tmp/my-app', workspace: { git_worktree: 'feat-x' } }, config: { display: { showProjectWorktree: true, ...display }, gitStatus } });
+  assert.match(lines(c())[0], /my-app ⎇ feat-x/);
+  assert.doesNotMatch(lines(c({ showProjectWorktree: false }))[0], /⎇/);
+  assert.doesNotMatch(lines(ctx({ stdin: { cwd: '/tmp/my-app' }, config: { display: { showProjectWorktree: true } } }))[0], /⎇/);
 });

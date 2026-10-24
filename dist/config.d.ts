@@ -7,7 +7,7 @@ declare const GIT_BRANCH_OVERFLOW_MODES: readonly ['truncate', 'wrap'];
 declare const MODEL_FORMATS: readonly ['full', 'compact', 'short'];
 declare const MODEL_SOURCES: readonly ['auto', 'stdin', 'transcript'];
 declare const EFFORT_FORMATS: readonly ['full', 'symbol', 'text'];
-declare const EFFORT_PLACEMENTS: readonly ['badge', 'segment'];
+declare const EFFORT_PLACEMENTS: readonly ['badge', 'segment', 'inline'];
 declare const TIME_FORMATS: readonly ['relative', 'absolute', 'both', 'elapsed', 'elapsedAndAbsolute'];
 declare const HOUR_CYCLES: readonly ['auto', 'h11', 'h12', 'h23', 'h24'];
 declare const CUSTOM_LINE_POSITIONS: readonly ['first', 'last'];
@@ -82,6 +82,8 @@ export interface HudConfig {
         showContextBar: boolean;
         contextValue: ContextValueMode;
         showConfigCounts: boolean;
+        showClaudeMdCount: boolean;
+        showProjectWorktree: boolean;
         showCost: boolean;
         showRoutedCost: boolean;
         showDailyCost: boolean;

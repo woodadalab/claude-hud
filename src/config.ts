@@ -22,7 +22,7 @@ const GIT_BRANCH_OVERFLOW_MODES = ['truncate', 'wrap'] as const;
 const MODEL_FORMATS = ['full', 'compact', 'short'] as const;
 const MODEL_SOURCES = ['auto', 'stdin', 'transcript'] as const;
 const EFFORT_FORMATS = ['full', 'symbol', 'text'] as const;
-const EFFORT_PLACEMENTS = ['badge', 'segment'] as const;
+const EFFORT_PLACEMENTS = ['badge', 'segment', 'inline'] as const;
 const TIME_FORMATS = ['relative', 'absolute', 'both', 'elapsed', 'elapsedAndAbsolute'] as const;
 const HOUR_CYCLES = ['auto', 'h11', 'h12', 'h23', 'h24'] as const;
 const CUSTOM_LINE_POSITIONS = ['first', 'last'] as const;
@@ -135,6 +135,8 @@ export interface HudConfig {
     showContextBar: boolean;
     contextValue: ContextValueMode;
     showConfigCounts: boolean;
+    showClaudeMdCount: boolean;
+    showProjectWorktree: boolean;
     showCost: boolean;
     // Also show cost for routed providers (Bedrock/Vertex), which showCost hides.
     showRoutedCost: boolean;
@@ -238,6 +240,8 @@ export const DEFAULT_CONFIG: HudConfig = {
     showContextBar: true,
     contextValue: 'percent',
     showConfigCounts: false,
+    showClaudeMdCount: true,
+    showProjectWorktree: false,
     showCost: false,
     showRoutedCost: false,
     showDailyCost: false,

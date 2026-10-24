@@ -5,7 +5,8 @@ export interface Part {
     key: FirstLineSegment | null;
     text: string;
 }
-/** Effort as its own segment after the model, colored by level, when effortPlacement is "segment". */
+/** Effort as its own segment after the model, colored by level, when effortPlacement is "segment"
+ * (or "inline" with the model hidden, so the effort still has somewhere to go). */
 export declare function effortPart(f: Frame): string | null;
 /** `[Opus 5.5 ◑ high | Bedrock]`, or with the provider first when showProvider is on. */
 export declare function modelBadge(f: Frame): string;

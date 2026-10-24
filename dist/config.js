@@ -19,7 +19,7 @@ const GIT_BRANCH_OVERFLOW_MODES = ['truncate', 'wrap'];
 const MODEL_FORMATS = ['full', 'compact', 'short'];
 const MODEL_SOURCES = ['auto', 'stdin', 'transcript'];
 const EFFORT_FORMATS = ['full', 'symbol', 'text'];
-const EFFORT_PLACEMENTS = ['badge', 'segment'];
+const EFFORT_PLACEMENTS = ['badge', 'segment', 'inline'];
 const TIME_FORMATS = ['relative', 'absolute', 'both', 'elapsed', 'elapsedAndAbsolute'];
 const HOUR_CYCLES = ['auto', 'h11', 'h12', 'h23', 'h24'];
 const CUSTOM_LINE_POSITIONS = ['first', 'last'];
@@ -93,6 +93,8 @@ export const DEFAULT_CONFIG = {
         showContextBar: true,
         contextValue: 'percent',
         showConfigCounts: false,
+        showClaudeMdCount: true,
+        showProjectWorktree: false,
         showCost: false,
         showRoutedCost: false,
         showDailyCost: false,

@@ -8,19 +8,26 @@ import { formatTokens } from '../utils/format.js';
 import { getFileHref, safeHyperlink } from '../utils/hyperlinks.js';
 import { sanitizeDisplayText } from '../utils/sanitize.js';
 import { truncateString } from '../utils/truncate.js';
-import { custom, dim, effortLevel, label, model as modelColor, project as projectColor } from './colors.js';
+import { custom, dim, effortLevel, git as gitColor, label, model as modelColor, project as projectColor } from './colors.js';
 import { claudeCodeVersion, effort, sessionCostUsd, sessionDuration, sessionName } from './derive.js';
 import { vcsPart } from './vcs.js';
 function effortSuffix(f) {
     const display = f.config?.display;
-    const info = display?.showEffortLevel && display.effortPlacement !== 'segment' ? effort(f) : null;
+    const info = display?.showEffortLevel && (display.effortPlacement ?? 'badge') === 'badge' ? effort(f) : null;
     return info ? ` ${formatEffort(info, display?.effortFormat)}` : '';
 }
-/** Effort as its own segment after the model, colored by level, when effortPlacement is "segment". */
+function coloredEffort(f) {
+    const display = f.config?.display;
+    const info = display?.showEffortLevel ? effort(f) : null;
+    return info ? effortLevel(formatEffort(info, display?.effortFormat), info.level) : null;
+}
+/** Effort as its own segment after the model, colored by level, when effortPlacement is "segment"
+ * (or "inline" with the model hidden, so the effort still has somewhere to go). */
 export function effortPart(f) {
     const display = f.config?.display;
-    const info = display?.showEffortLevel && display.effortPlacement === 'segment' ? effort(f) : null;
-    return info ? effortLevel(formatEffort(info, display?.effortFormat), info.level) : null;
+    const placement = display?.effortPlacement;
+    const own = placement === 'segment' || (placement === 'inline' && display?.showModel === false);
+    return own ? coloredEffort(f) : null;
 }
 /** `[Opus 5.5 ◑ high | Bedrock]`, or with the provider first when showProvider is on. */
 export function modelBadge(f) {
@@ -33,7 +40,9 @@ export function modelBadge(f) {
         const shown = display.providerName?.trim() || provider;
         text = shown ? `${shown} | ${core}` : core;
     }
-    return modelColor(`[${text}]`, f.config?.colors);
+    const inline = display?.effortPlacement === 'inline' ? coloredEffort(f) : null;
+    const badge = modelColor(`[${text}]`, f.config?.colors);
+    return inline ? `${badge} ${inline}` : badge;
 }
 /** An untrusted cwd shown with the configured number of trailing segments, on POSIX and Windows. */
 function formatProjectPath(cwd, pathLevels) {
@@ -93,6 +102,11 @@ export function projectParts(f, layout) {
             project = project ? `${project} ${dirs}` : dirs;
     }
     const vcs = vcsPart(f, layout);
+    const worktreeName = sanitizeDisplayText(f.stdin.workspace?.git_worktree ?? '').trim();
+    const vcsShowsWorktree = vcs !== null && (f.config.gitStatus?.showWorktree ?? false);
+    if (project && display?.showProjectWorktree && worktreeName && !vcsShowsWorktree) {
+        project = `${project} ${gitColor(`⎇ ${worktreeName}`, colors)}`;
+    }
     if (project && vcs) {
         const overflow = f.config.gitStatus?.branchOverflow ?? DEFAULT_CONFIG.gitStatus.branchOverflow;
         return overflow === 'wrap' ? [project, vcs] : [`${project} ${vcs}`];
@@ -169,7 +183,7 @@ export function configCountParts(f, mcpSuffix = '') {
         return [];
     const colors = f.config?.colors;
     return [
-        f.claudeMdCount > 0 ? label(`${f.claudeMdCount} CLAUDE.md`, colors) : null,
+        f.claudeMdCount > 0 && display?.showClaudeMdCount !== false ? label(`${f.claudeMdCount} CLAUDE.md`, colors) : null,
         f.rulesCount > 0 ? label(`${f.rulesCount} ${t('label.rules')}`, colors) : null,
         f.mcpCount > 0 ? `${label(`${f.mcpCount} MCPs`, colors)}${mcpSuffix}` : null,
         f.hooksCount > 0 ? label(`${f.hooksCount} ${t('label.hooks')}`, colors) : null,
