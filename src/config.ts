@@ -22,6 +22,7 @@ const GIT_BRANCH_OVERFLOW_MODES = ['truncate', 'wrap'] as const;
 const MODEL_FORMATS = ['full', 'compact', 'short'] as const;
 const MODEL_SOURCES = ['auto', 'stdin', 'transcript'] as const;
 const EFFORT_FORMATS = ['full', 'symbol', 'text'] as const;
+const EFFORT_PLACEMENTS = ['badge', 'segment'] as const;
 const TIME_FORMATS = ['relative', 'absolute', 'both', 'elapsed', 'elapsedAndAbsolute'] as const;
 const HOUR_CYCLES = ['auto', 'h11', 'h12', 'h23', 'h24'] as const;
 const CUSTOM_LINE_POSITIONS = ['first', 'last'] as const;
@@ -58,6 +59,7 @@ const FIRST_LINE_SEGMENTS = [
   'cost',
   'speed',
   'auth',
+  'effort',
 ] as const;
 
 export type LineLayoutType = typeof LINE_LAYOUTS[number];
@@ -67,6 +69,7 @@ export type UsageValueMode = typeof USAGE_VALUE_MODES[number];
 export type GitBranchOverflowMode = typeof GIT_BRANCH_OVERFLOW_MODES[number];
 export type ModelFormatMode = typeof MODEL_FORMATS[number];
 export type EffortFormatMode = typeof EFFORT_FORMATS[number];
+export type EffortPlacementMode = typeof EFFORT_PLACEMENTS[number];
 export type TimeFormatMode = typeof TIME_FORMATS[number];
 export type HourCycleMode = typeof HOUR_CYCLES[number];
 export type CustomLinePosition = typeof CUSTOM_LINE_POSITIONS[number];
@@ -164,6 +167,7 @@ export interface HudConfig {
     showClaudeCodeVersion: boolean;
     showEffortLevel: boolean;
     effortFormat: EffortFormatMode;
+    effortPlacement: EffortPlacementMode;
     showAgentEffort: boolean;
     showMemoryUsage: boolean;
     showPromptCache: boolean;
@@ -264,6 +268,7 @@ export const DEFAULT_CONFIG: HudConfig = {
     showClaudeCodeVersion: false,
     showEffortLevel: false,
     effortFormat: 'full',
+    effortPlacement: 'badge',
     showAgentEffort: false,
     showMemoryUsage: false,
     showPromptCache: false,
@@ -408,6 +413,7 @@ const RULES: Record<string, Rule> = {
   'display.skillsMaxVisible': count,
   'display.authUserLength': count,
   'display.effortFormat': oneOf(EFFORT_FORMATS),
+  'display.effortPlacement': oneOf(EFFORT_PLACEMENTS),
   'display.mergeGroups': mergeGroups,
   'display.rightAlign': names(ELEMENTS, false),
   'display.contextWarningThreshold': clamp(0, 100),

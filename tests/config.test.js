@@ -96,6 +96,7 @@ test('enum options accept only their listed values', () => {
     'display.contextValue': ['percent', 'tokens', 'remaining', 'both'],
     'display.usageValue': ['percent', 'remaining'],
     'display.effortFormat': ['full', 'symbol', 'text'],
+    'display.effortPlacement': ['badge', 'segment'],
     'display.modelFormat': ['full', 'compact', 'short'],
     'display.modelSource': ['auto', 'stdin', 'transcript'],
     'display.customLinePosition': ['first', 'last'],

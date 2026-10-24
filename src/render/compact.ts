@@ -7,7 +7,7 @@ import { contextBarAndValue, tokenBreakdown } from './context.js';
 import { cacheHitRateLine, promptCacheLine, sessionTimeLine } from './lines.js';
 import { orderParts } from './order.js';
 import {
-  advisorPart, authPart, compactionsPart, configCountParts, costPart, customLinePart, durationPart, extraPart,
+  advisorPart, authPart, compactionsPart, configCountParts, costPart, customLinePart, durationPart, effortPart, extraPart,
   modelBadge, projectParts, sessionNamePart, sessionTokensSummary, speedPart, versionPart, type Part,
 } from './parts.js';
 import { usageParts } from './usage.js';
@@ -28,6 +28,7 @@ function sessionLine(f: Frame): string {
   };
   add(customLinePart(f, 'first'));
   add(modelCluster(f), 'model');
+  add(effortPart(f), 'effort');
   for (const part of projectParts(f, 'compact')) add(part, 'project');
   add(sessionNamePart(f), 'sessionName');
   add(versionPart(f), 'version');

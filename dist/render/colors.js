@@ -84,6 +84,34 @@ export function label(text, colors) {
 export function custom(text, colors) {
     return withOverride(text, colors?.custom, CLAUDE_ORANGE);
 }
+// Effort ramps from gray at low to a bold pink→orange→gold gradient at max.
+const EFFORT_RGB = {
+    low: [108, 108, 108],
+    medium: [138, 155, 176],
+    high: [95, 175, 230],
+    xhigh: [175, 135, 255],
+};
+const EFFORT_GRADIENT = [[255, 95, 215], [255, 135, 95], [255, 215, 95]];
+const BOLD = '\x1b[1m';
+const rgbAnsi = ([r, g, b]) => `\x1b[38;2;${r};${g};${b}m`;
+const lerp = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
+function gradient(text, stops) {
+    const chars = [...text];
+    return chars.map((ch, i) => {
+        const pos = chars.length > 1 ? (i / (chars.length - 1)) * (stops.length - 1) : 0;
+        const idx = Math.min(Math.floor(pos), stops.length - 2);
+        return `${rgbAnsi(lerp(stops[idx], stops[idx + 1], pos - idx))}${ch}`;
+    }).join('');
+}
+/** Colors effort text by its level; max and ultracode get the gradient, unknown levels dim. */
+export function effortLevel(text, level) {
+    if (level === 'max' || level.startsWith('ultracode('))
+        return `${BOLD}${gradient(text, EFFORT_GRADIENT)}${RESET}`;
+    const rgb = EFFORT_RGB[level];
+    if (!rgb)
+        return dim(text);
+    return colorize(text, `${level === 'xhigh' ? BOLD : ''}${rgbAnsi(rgb)}`);
+}
 export function warning(text, colors) {
     return colorize(text, resolveAnsi(colors?.warning, YELLOW));
 }

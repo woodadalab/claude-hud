@@ -8,7 +8,7 @@ import type { LabelAlign } from './labels.js';
 import { addedDirsLine, cacheHitRateLine, environmentLine, memoryLine, promptCacheLine, sessionTimeLine } from './lines.js';
 import { orderParts } from './order.js';
 import {
-  advisorPart, authPart, compactionsPart, costPart, customLinePart, durationPart, extraPart, modelBadge,
+  advisorPart, authPart, compactionsPart, costPart, customLinePart, durationPart, effortPart, extraPart, modelBadge,
   projectParts, sessionNamePart, sessionTokensSummary, speedPart, versionPart, type Part,
 } from './parts.js';
 import { usageParts } from './usage.js';
@@ -25,6 +25,7 @@ function projectLine(f: Frame): string | null {
   };
   add(customLinePart(f, 'first'));
   if (display?.showModel !== false) add(modelBadge(f), 'model');
+  add(effortPart(f), 'effort');
   for (const part of projectParts(f, 'expanded')) add(part, 'project');
   add(advisorPart(f), 'advisor');
   add(sessionNamePart(f), 'sessionName');

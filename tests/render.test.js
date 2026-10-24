@@ -197,6 +197,21 @@ test('the model badge keeps effort on the model and places the provider by showP
   assert.equal(badge(xhigh, { showEffortLevel: true, effortFormat: 'symbol' }, { ultracodeActive: true }), '[Opus ◕ ultracode(xhigh) | Enterprise]');
 });
 
+test('effortPlacement segment moves effort out of the badge into its own level-colored segment', () => {
+  const c = (level, display = {}, config = {}) => ctx({ stdin: { model: { display_name: 'Opus', id: 'opusplan' }, effort: { level } }, config: { display: { showEffortLevel: true, effortPlacement: 'segment', ...display }, ...config } });
+  const segments = (...args) => lines(c(...args))[0].split(' │ ');
+  const colored = (...args) => raw(c(...args))[0];
+  assert.deepEqual(segments('high').slice(0, 2), ['[Opus | Enterprise]', '◑ high']);
+  assert.equal(segments('high', { effortFormat: 'text' })[1], 'high');
+  assert.equal(segments('high', {}, { projectLineOrder: ['effort'] })[0], '◑ high');
+  assert.equal(segments('high', { effortPlacement: 'badge' })[0], '[Opus ◑ high | Enterprise]');
+  assert.ok(!segments('high', { showEffortLevel: false }).includes('◑ high'));
+  assert.match(colored('low'), /\x1b\[38;2;108;108;108m○ low/);
+  assert.match(colored('xhigh'), /\x1b\[1m\x1b\[38;2;175;135;255m◕ xhigh/);
+  assert.match(colored('max'), /\x1b\[1m\x1b\[38;2;255;95;215m●/);
+  assert.match(colored('turbo'), /\x1b\[2mturbo/);
+});
+
 test('the advisor shows a readable model name or the override, capped', () => {
   const advisor = (advisorModel, display = {}) => lines(ctx({ transcript: { advisorModel }, config: { display: { showAdvisor: true, ...display } } }))[0].split(' │ ').at(-1);
   assert.equal(advisor('claude-opus-4-7'), 'Advisor: Opus 4.7');

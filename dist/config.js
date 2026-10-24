@@ -19,6 +19,7 @@ const GIT_BRANCH_OVERFLOW_MODES = ['truncate', 'wrap'];
 const MODEL_FORMATS = ['full', 'compact', 'short'];
 const MODEL_SOURCES = ['auto', 'stdin', 'transcript'];
 const EFFORT_FORMATS = ['full', 'symbol', 'text'];
+const EFFORT_PLACEMENTS = ['badge', 'segment'];
 const TIME_FORMATS = ['relative', 'absolute', 'both', 'elapsed', 'elapsedAndAbsolute'];
 const HOUR_CYCLES = ['auto', 'h11', 'h12', 'h23', 'h24'];
 const CUSTOM_LINE_POSITIONS = ['first', 'last'];
@@ -53,6 +54,7 @@ const FIRST_LINE_SEGMENTS = [
     'cost',
     'speed',
     'auth',
+    'effort',
 ];
 // sessionTokens is left out so the tokens summary keeps its place on the last line until it's placed.
 export const DEFAULT_ELEMENT_ORDER = ELEMENTS.filter(element => element !== 'sessionTokens');
@@ -121,6 +123,7 @@ export const DEFAULT_CONFIG = {
         showClaudeCodeVersion: false,
         showEffortLevel: false,
         effortFormat: 'full',
+        effortPlacement: 'badge',
         showAgentEffort: false,
         showMemoryUsage: false,
         showPromptCache: false,
@@ -248,6 +251,7 @@ const RULES = {
     'display.skillsMaxVisible': count,
     'display.authUserLength': count,
     'display.effortFormat': oneOf(EFFORT_FORMATS),
+    'display.effortPlacement': oneOf(EFFORT_PLACEMENTS),
     'display.mergeGroups': mergeGroups,
     'display.rightAlign': names(ELEMENTS, false),
     'display.contextWarningThreshold': clamp(0, 100),

@@ -13,6 +13,8 @@ export declare function git(text: string, colors?: Partial<HudColorOverrides>): 
 export declare function gitBranch(text: string, colors?: Partial<HudColorOverrides>): string;
 export declare function label(text: string, colors?: Partial<HudColorOverrides>): string;
 export declare function custom(text: string, colors?: Partial<HudColorOverrides>): string;
+/** Colors effort text by its level; max and ultracode get the gradient, unknown levels dim. */
+export declare function effortLevel(text: string, level: string): string;
 export declare function warning(text: string, colors?: Partial<HudColorOverrides>): string;
 export declare function critical(text: string, colors?: Partial<HudColorOverrides>): string;
 interface ContextThresholds {

@@ -10,7 +10,7 @@ import { getFileHref, safeHyperlink } from '../utils/hyperlinks.js';
 import { sanitizeDisplayText } from '../utils/sanitize.js';
 import { truncateString } from '../utils/truncate.js';
 import type { Frame, Layout } from './frame.js';
-import { custom, dim, label, model as modelColor, project as projectColor } from './colors.js';
+import { custom, dim, effortLevel, label, model as modelColor, project as projectColor } from './colors.js';
 import { claudeCodeVersion, effort, sessionCostUsd, sessionDuration, sessionName } from './derive.js';
 import { vcsPart } from './vcs.js';
 
@@ -22,8 +22,15 @@ export interface Part {
 
 function effortSuffix(f: Frame): string {
   const display = f.config?.display;
-  const info = display?.showEffortLevel ? effort(f) : null;
+  const info = display?.showEffortLevel && display.effortPlacement !== 'segment' ? effort(f) : null;
   return info ? ` ${formatEffort(info, display?.effortFormat)}` : '';
+}
+
+/** Effort as its own segment after the model, colored by level, when effortPlacement is "segment". */
+export function effortPart(f: Frame): string | null {
+  const display = f.config?.display;
+  const info = display?.showEffortLevel && display.effortPlacement === 'segment' ? effort(f) : null;
+  return info ? effortLevel(formatEffort(info, display?.effortFormat), info.level) : null;
 }
 
 /** `[Opus 5.5 ◑ high | Bedrock]`, or with the provider first when showProvider is on. */

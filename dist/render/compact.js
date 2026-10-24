@@ -5,7 +5,7 @@ import { separatorLine, visibleWidth } from './ansi.js';
 import { contextBarAndValue, tokenBreakdown } from './context.js';
 import { cacheHitRateLine, promptCacheLine, sessionTimeLine } from './lines.js';
 import { orderParts } from './order.js';
-import { advisorPart, authPart, compactionsPart, configCountParts, costPart, customLinePart, durationPart, extraPart, modelBadge, projectParts, sessionNamePart, sessionTokensSummary, speedPart, versionPart, } from './parts.js';
+import { advisorPart, authPart, compactionsPart, configCountParts, costPart, customLinePart, durationPart, effortPart, extraPart, modelBadge, projectParts, sessionNamePart, sessionTokensSummary, speedPart, versionPart, } from './parts.js';
 import { usageParts } from './usage.js';
 const ACTIVITY = ['tools', 'skills', 'mcp', 'agents', 'todos'];
 // The context bar rides with the model badge, so the cluster moves as the 'model' segment.
@@ -22,6 +22,7 @@ function sessionLine(f) {
     };
     add(customLinePart(f, 'first'));
     add(modelCluster(f), 'model');
+    add(effortPart(f), 'effort');
     for (const part of projectParts(f, 'compact'))
         add(part, 'project');
     add(sessionNamePart(f), 'sessionName');
