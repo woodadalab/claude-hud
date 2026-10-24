@@ -1,0 +1,66 @@
+{
+  "lineLayout": "expanded",
+  "showSeparators": false,
+  "language": "en",
+  "display": {
+    "showModel": true,
+    "showContextBar": true,
+    "showProject": true,
+    "showConfigCounts": true,
+    "showUsage": true,
+    "usageBarEnabled": true,
+    "modelFormat": "short",
+    "sevenDayThreshold": 0,
+    "showTools": false,
+    "showAgents": false,
+    "showTodos": false,
+    "showTokenBreakdown": false,
+    "showSpeed": false,
+    "showDuration": false,
+    "showSessionName": false,
+    "showSessionTokens": false,
+    "usageWindowDuration": true,
+    "showEffortLevel": true,
+    "effortFormat": "full",
+    "effortPlacement": "inline",
+    "mergeGroups": [
+      [
+        "context",
+        "environment"
+      ]
+    ],
+    "showClaudeMdCount": false,
+    "showProjectWorktree": true,
+    "showAuth": true,
+    "showAuthUser": true,
+    "authUserLength": 0
+  },
+  "gitStatus": {
+    "enabled": false,
+    "showDirty": false,
+    "showAheadBehind": false,
+    "showFileStats": false
+  },
+  "elementOrder": [
+    "project",
+    "addedDirs",
+    "context",
+    "environment",
+    "usage",
+    "promptCache",
+    "cacheHitRate",
+    "memory",
+    "tools",
+    "skills",
+    "mcp",
+    "agents",
+    "todos",
+    "sessionTime"
+  ],
+  "projectLineOrder": [
+    "model",
+    "effort",
+    "auth",
+    "project"
+  ]
+}
